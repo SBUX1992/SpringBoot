@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<style>
+	table {
+		width: 650px
+	}
+	
+</style>
+
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>bet</title>
+	</head>
+	<body>
+		<h3>Bet</h3>
+		<form th:action="@{/bet/bet}" method="post">
+			<table border="1">
+				<tr align="center" height="30">
+					<th colspan="4">1팀</th>
+					<th width="100">결과</th>
+					<th width="100">배당률</th>
+					<th>배팅총액</th>
+				</tr>
+				<tr align="center" height="50">
+					<th rowspan="2" width="80">선수</th>
+					<td>1</td>
+					<td>2</td>
+					<td>3</td>
+					<td width="100" rowspan="2">win</td>
+					<td width="100" rowspan="2">10배</td>
+					<td width="100" rowspan="2"><strong>50,000</strong></td>
+				</tr>
+				<tr align="center" height="50">
+					<td>sbux</td>
+					<td>sbux</td>
+					<td>sbux</td>
+				</tr>
+			</table>
+			<br>
+			<br>
+			<table border="1" width="650">
+				<tr align="center" height="30">
+					<th colspan="4">2팀</th>
+					<th width="100">결과</th>
+					<th width="100">배당률</th>
+					<th>배팅총액</th>
+				</tr>
+				<tr align="center" height="50">
+					<th rowspan="2" width="80">선수</th>
+					<td>1</td>
+					<td>2</td>
+					<td>3</td>
+					<td width="100" rowspan="2">win</td>
+					<td width="100" rowspan="2">10배</td>
+					<td width="100" rowspan="2"><strong>50,000</strong></td>
+				</tr>
+				<tr align="center" height="50">
+					<td>sbux</td>
+					<td>sbux</td>
+					<td>sbux</td>
+				</tr>
+			</table>
+		</form>
+		<br>
+<!-- 		<a th:href="@{/history/rank}">역대전적</a> -->
+		
+	</body>
+</html>
