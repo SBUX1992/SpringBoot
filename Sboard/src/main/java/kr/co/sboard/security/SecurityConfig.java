@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {			// 메인 i
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		// 인가(접근권한) 설정
+		// 인가(접근권한) 설정 = grade 레벨을 올려줘야 읽기, 쓰기, 수정 가능
 		http.authorizeRequests().antMatchers("/").permitAll();
 		http.authorizeRequests().antMatchers("/list").hasAnyRole("2", "3", "4", "5");
 		http.authorizeRequests().antMatchers("/write").hasAnyRole("3", "4", "5");
