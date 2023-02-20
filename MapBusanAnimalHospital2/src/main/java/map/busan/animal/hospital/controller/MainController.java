@@ -14,7 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import map.busan.animal.hospital.vo.ItemVO;
 import map.busan.animal.hospital.vo.ResultVO;
@@ -25,11 +24,11 @@ public class MainController {
 	@GetMapping(value = {"/", "/index"})
 	public String index(Model model) {
 		// API 정보
-		String apiURL = "http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital";		
+		String apiURL = "http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnumalHospital";
 		String serviceKey = "AGv7gh3UCCKgDhDPu2sK%2BatutI3NxQe23l8W0UgK1B%2By%2BVVp0dq6F2fzpZ7ScqYUWm9c4wQ7MEY1pV56HOMwtg%3D%3D";
 		String resultType = "json";
 		String pageNo = "1";
-		String numOfRows = "1000"; // 부산시 전체 동물병원 279
+		String numOfRows = "100"; // 부산시 전체 동물병원 279
 		
 		URI uri = UriComponentsBuilder
 					.fromUriString(apiURL)
@@ -55,8 +54,7 @@ public class MainController {
 			ResultVO resultVO = om.readValue(jsonData, ResultVO.class);
 			List<ItemVO> items = resultVO.getGetTblAnimalHospital().getBody().getItems().getItem();
 			
-			System.out.print(items);
-			
+			//System.outprint(items);
 			model.addAttribute("items", items);
 			
 		}catch(JsonMappingException e) {

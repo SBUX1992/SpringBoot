@@ -43,7 +43,6 @@ public class UserController {
 		String regip = req.getRemoteAddr();
 		vo.setRegip(regip);
 		int result = service.insertUser(vo);
-		
 		return "redirect:/user/login?success="+result;
 	}
 	

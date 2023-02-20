@@ -2,8 +2,6 @@ package map.busan.animal.hospital.vo;
 
 import java.util.List;
 
-import org.springframework.http.StreamingHttpOutputMessage.Body;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

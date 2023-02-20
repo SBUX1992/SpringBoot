@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class ItemVO {
 	
-	private String gugun;
+	private String gugin;
 	private String animal_hospital;	// 병원이름
 	private String approval;
 	private String road_address;

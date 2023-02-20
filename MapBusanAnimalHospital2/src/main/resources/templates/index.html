@@ -21,9 +21,9 @@
 		
 		for(var item of items){
 			// 마커 생성
-			var marker = new kakao.maps.Marker({
-							title: item.animal_hospital,
-							position: new kakao.maps.LatLng(item.lat, item.lon)
+			var marker = new kakao.maps.marker({
+							title : item.animal_hospital,
+							position : new kakao.maps.LatLng(item.lat, item.lon)
 			});
 			// 마커 표시
 			marker.setMap(map);
