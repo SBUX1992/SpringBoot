@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.voard.jwt.JWTUtil;
+import kr.co.voard.repository.UserEntity;
 import kr.co.voard.security.MyUserDetails;
 import kr.co.voard.security.SecurityUserService;
 import kr.co.voard.vo.UserVO;
@@ -46,22 +47,46 @@ public class UserController {
 		String pass = vo.getPass();
 		securityUserService.loadUserByUsername(uid);
 		MyUserDetails myUserDetails = securityUserService.loadUserByUsername(uid);
-		log.info("login...1");
+		log.info("login...1");	// 아이디가 없으면 에러 발생
 		
 		// security 인증처리
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(myUserDetails, pass));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		log.info("login...2");
+		log.info("login...2");	// 비밀번호 틀리면 에러 발생
 		
 		// JWT 생성
 		String token = jwtUtil.generateToken(uid);
-		log.info("login...3" + token);
+		log.info("login...3" + token);	// 아이디, 비밀번호가 DB와 일치하면 토큰 발행
 		
 		// 데이터 출력
+		
+		UserEntity user = myUserDetails.getUser();
+		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("accessToken", token);
+		resultMap.put("user", user);
 		
 		return resultMap;
+	}
+	
+	
+	//
+	@ResponseBody
+	@GetMapping("/user/auth")
+	public Map<String, Object> auth(Authentication authentication) {
+		
+		log.info("auth...1");
+		
+		// Security 사용자 인증 객체 
+		MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
+		UserEntity user = myUserDetails.getUser();
+		
+		log.info("auth...3 : " + user);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("user", user);
+		
+		return resultMap;	
 	}
 	
 	@GetMapping("/user/logout")
