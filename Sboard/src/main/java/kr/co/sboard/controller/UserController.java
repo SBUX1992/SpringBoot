@@ -5,26 +5,24 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.sboard.service.UserService;
 import kr.co.sboard.vo.TermsVO;
 import kr.co.sboard.vo.UserVO;
-import lombok.extern.slf4j.Slf4j;
 
+@MapperScan("kr.co.sboard.dao")
 @Controller
 public class UserController {
 
 	@Autowired
 	private UserService service;
-	
 	
 	@GetMapping("user/login")
 	public String login() {
@@ -37,18 +35,26 @@ public class UserController {
 	}
 	
 	@PostMapping("user/register")
-	public String register(UserVO vo, HttpServletRequest req) {
-		String regip = req.getRemoteAddr();
-		vo.setRegip(regip);
-		int result = service.insertUser(vo);
+	public String register(UserVO vo, HttpServletRequest request) {
+		//사용자 IP 값
+		vo.setRegip(request.getRemoteAddr());
 		
-		return "redirect:/user/login?success="+result;
+		int result = service.insertUser(vo);
+		if(result > 0) {
+			//회원가입 성공
+			result = 101;
+		}else {
+			//회원가입 실패
+			result = 100;
+		}
+		
+		return "redirect:/user/login?success=" + result;
 	}
 	
 	@GetMapping("user/terms")
 	public String terms(Model model) {
 		TermsVO vo = service.selectTerms();
-		model.addAttribute(vo);
+		model.addAttribute("vo", vo);
 		return "user/terms";
 	}
 	
@@ -58,10 +64,15 @@ public class UserController {
 		int result = service.countUser(uid);
 		Map<String, Integer> map = new HashMap<>();
 		map.put("result", result);
-		
 		return map;
 	}
 	
-	
-	
+	@ResponseBody
+	@GetMapping("user/checkNick")
+	public Map<String, Integer> checkNick(String nick) {
+		int result = service.countNick(nick);
+		Map<String, Integer> map = new HashMap<>();
+		map.put("result", result);
+		return map;
+	}
 }

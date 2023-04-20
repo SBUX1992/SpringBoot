@@ -11,7 +11,7 @@
         <header>
             <h3>Board System v1.0</h3>
             <p>
-                <span class="nick" sec:authentication="principal.user.nick">길동이</span>님 반갑습니다.
+                <span class="nick" sec:authentication="principal.user.nick"></span>님 반갑습니다.
                 <a th:href="@{/user/logout}" class="logout">[로그아웃]</a>
             </p>
         </header>
@@ -27,28 +27,25 @@
                     <th>날짜</th>
                     <th>조회</th>
                 </tr>
-                <tr th:each="article,i:${articles}">
-                    <td>[[${pageStartNum - i.index}]]</td>
-                    <td><a th:href="@{/view(no=${article.no})}">[[${article.title}]] &#91;[[${article.comment}]]&#93;</a></td>
-                    <td>[[${article.nick}]]</td>
-                    <td>[[${article.rdate}]]</td>
-                    <td>[[${article.hit}]]</td>
-                </tr>
+                
+                <tr th:each="vo,voState:${articles}">
+                    <td th:text="${num + voState.count}"></td>
+                    <td><a th:href="@{/view(no=${vo.no}, pg=${pg})}">[[${vo.title}]] &#91;[[${vo.comment}]]&#93;</a></td>
+                    <td>[[${vo.nick}]]</td>
+                    <td>[[${vo.rdate}]]</td>
+                    <td>[[${vo.hit}]]</td>
+                </tr>               
+                
             </table>
 
             <div class="page">
-                <th:block th:if="${groups[0]>1}">
-                	<a th:href="@{/list(pg=${groups[0]-1})}" class="prev">이전</a>
+            	<th:block th:if="${groups[0] > 1}">
+            		<a th:href="@{/list(pg=${groups[0]-1})}" class="prev">이전</a>
+            	</th:block>
+                <th:block th:each="cnt:${#numbers.sequence(groups[0], groups[1])}">
+                	<a th:href="@{/list(pg=${cnt})}" class="num" th:class="${cnt}==${pg} ? 'current' : 'off'" th:text=${cnt}></a>
                 </th:block>
-                
-                <th:block th:each="num:${#numbers.sequence(groups[0],groups[1])}">
-                
-                	<a th:href="@{/list(pg=${num})}" 
-                	   th:class="${num==currentPage?'num current':'num'}">[[${num}]]</a>
-                	          
-                </th:block>
-                
-                <th:block th:if="${groups[1]<lastPageNum}">
+                <th:block th:if="${groups[1] < groups[2]}">
                 	<a th:href="@{/list(pg=${groups[1]+1})}" class="next">다음</a>
                 </th:block>
             </div>

@@ -11,36 +11,38 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {			// 메인 index 비밀번호 없이 화면 띄우기 위해
-	// SecurityConfig > MyUserDetails > SecurityUserService > MyUserDetails > SecurityConfig
-
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
-		// 인가(접근권한) 설정 = grade 레벨을 올려줘야 읽기, 쓰기, 수정 가능
+		// 접근권한
 		http.authorizeRequests().antMatchers("/").permitAll();
-		http.authorizeRequests().antMatchers("/list").hasAnyRole("2", "3", "4", "5");
-		http.authorizeRequests().antMatchers("/write").hasAnyRole("3", "4", "5");
-		http.authorizeRequests().antMatchers("/view").hasAnyRole("3", "4", "5");
-		http.authorizeRequests().antMatchers("/modify").hasAnyRole("3", "4", "5");
-		
-		
-		// 사이트 위조 방지 설정
+		http.authorizeRequests().antMatchers("/board/list").hasAnyRole("2", "3", "4", "5") ;
+		http.authorizeRequests().antMatchers("/board/write").hasAnyRole("2", "3", "4", "5") ;
+		http.authorizeRequests().antMatchers("/board/view").hasAnyRole("2", "3", "4", "5") ;
+		http.authorizeRequests().antMatchers("/board/modify").hasAnyRole("2","3", "4", "5") ;
+
+		// 사이트위조 방지설정
 		http.csrf().disable();
-		
-		// 로그인 설정
+
+		//로그인 
 		http.formLogin()
 		.loginPage("/user/login")
-		.defaultSuccessUrl("/list")
-		.failureUrl("/user/login?success=100")
+		.defaultSuccessUrl("/list?pg=1")
+		.failureUrl("/user/login?success=102")
 		.usernameParameter("uid")
 		.passwordParameter("pass");
-		
-		// 로그아웃 설정
+
+		//로그아웃 설정 
 		http.logout()
 		.invalidateHttpSession(true)
 		.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-		.logoutSuccessUrl("/user/login?success=200");
+		.logoutSuccessUrl("/user/login?success=103");
+
+		// 자동로그인
+		// http.rememberMe().key("remember_me").rememberMeParameter("remember_me").
+		// tokenValiditySeconds(3600);
+
 	}
 	
 	@Autowired
@@ -48,19 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {			// 메인 i
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// Security 사용자에 대한 테스트 권한 설정
-		//auth.inMemoryAuthentication().withUser("admin").password("{noop}1234").roles("ADMIN");
-		//auth.inMemoryAuthentication().withUser("manager").password("{noop}1234").roles("MANAGER");
-		//auth.inMemoryAuthentication().withUser("member").password("{noop}1234").roles("MEMBER");
-		
-		// 로그인 인증 처리 서비스, 암호화 방식 설정
+		//로그인 암호화 서비스 방식 설정
 		auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
 	@Bean
-    public PasswordEncoder encoder() {
+	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
-    }
-	
-	
+	}
+
 }

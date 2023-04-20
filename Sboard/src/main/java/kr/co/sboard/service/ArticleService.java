@@ -1,5 +1,6 @@
 package kr.co.sboard.service;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,62 +29,95 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ArticleService {
-
+	
 	@Autowired
 	private ArticleDAO dao;
 	
 	public int insertArticle(ArticleVO vo) {
-		
-		// 글 등록
-		int result = dao.insertArticle(vo);
-		// 파일 업로드
-		FileVO fvo = fileUpload(vo);
-		// 파일 등록
-		if(fvo != null) {
+		int result = 0;
+		MultipartFile file = vo.getFname();
+		if(file.isEmpty()) {
+			//파일이 첨부x
+			result = dao.insertArticle(vo);
+		}else {
+			//파일이 첨부O
+			vo.setFile(1);
+			result = dao.insertArticle(vo);
+			//파일 업로드
+			FileVO fvo = new FileVO();
+			fvo.setParent(vo.getNo());
+			fileUpload(file, fvo);
+			//파일 등록(Insert)
 			dao.insertFile(fvo);
 		}
 		
-		return result;	
-	}
-	
-	public int selectCountTotal() {
-		return dao.selectCountTotal();
+		return result;
 	}
 	
 	public ArticleVO selectArticle(int no) {
 		return dao.selectArticle(no);
 	}
-	public List<ArticleVO> selectArticles(int start) {
-		return dao.selectArticles(start);
-	}
+	
 	public FileVO selectFile(int fno) {
 		return dao.selectFile(fno);
 	}
-	public int updateFileDownload(int fno) {
-		return dao.updateFileDownload(fno);
+	
+	public void updateFileDownload(int fno) {
+		dao.updateFileDownload(fno);
+	}
+	
+	public List<ArticleVO> selectArticles(int pg){
+		log.info("페이지 : " + pg);
+		//페이지 그룹 계산
+		pg = (pg-1) * 10;
+		
+		return dao.selectArticles(pg);
+	}
+	
+	public int countArticles() {
+		int count = dao.countArticles();
+		if(count % 10 == 0) {
+			count = count / 10;
+		}else {
+			count = count / 10 + 1;
+		}
+		return count;
 	}
 	
 	public int updateArticle(ArticleVO vo) {
 		return dao.updateArticle(vo);
 	}
+	
+	public int updateArticleHit(int no) {
+		return dao.updateArticleHit(no);
+	}
+	
 	public int deleteArticle(int no) {
 		return dao.deleteArticle(no);
 	}
 	
-	// 파일 다운로드
+	public void deleteFile(int no, String newName) {
+		dao.deleteFile(no);
+		fileDelete(newName);
+	}
+	
+	
+	//파일 경로
+	@Value("${spring.servlet.multipart.location}")
+	private String uploadPath;
+	
+	//파일 다운로드
 	public ResponseEntity<Resource> fileDownload(FileVO vo) throws IOException {
-		
-		Path path = Paths.get(uploadPath+"/"+vo.getNewName()); 
-		log.info("path : "+path);
+		//String path = new File(uploadPath).getAbsolutePath()+"/"+vo.getNewName();
+		Path path = Paths.get(uploadPath+"/"+vo.getNewName());
 		
 		String contentType = Files.probeContentType(path);
-		log.info("contentType : "+contentType);
 		
 		HttpHeaders headers = new HttpHeaders();
+		
 		headers.setContentDisposition(ContentDisposition
-										.builder("attachment")
-										.filename(vo.getOriName(), StandardCharsets.UTF_8)
-										.build());
+				.builder("attachment")
+				.filename(vo.getOriName(), StandardCharsets.UTF_8).build());
 		
 		headers.add(HttpHeaders.CONTENT_TYPE, contentType);
 		
@@ -91,102 +125,54 @@ public class ArticleService {
 		
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 	}
-	
-	
-	// 파일 업로드
-	@Value("${spring.servlet.multipart.location}")
-	private String uploadPath;
-	
-	public FileVO fileUpload(ArticleVO vo) {
-		// 첨부 파일
-		MultipartFile file = vo.getFname();
-		FileVO fvo = null;
+
+	//파일 업로드
+	public void fileUpload(MultipartFile file, FileVO fvo) {
+		//파일 저장경로
+		String path = new File(uploadPath).getAbsolutePath();
+		//원본 이름
+		String oriName = file.getOriginalFilename();
+		String ext = oriName.substring(oriName.lastIndexOf("."));
+		//저장될 이름
+		String newName = UUID.randomUUID().toString() + ext;
 		
-		if(!file.isEmpty()) {
-			// 시스템 경로
-			String path = new File(uploadPath).getAbsolutePath();
-			
-			// 새 파일명 생성
-			String oName = file.getOriginalFilename();
-			String ext = oName.substring(oName.lastIndexOf("."));
-			String nName = UUID.randomUUID().toString()+ext;
-			
-			// 파일 저장
-			try {
-				file.transferTo(new File(path, nName));
-			} catch (IllegalStateException e) {
-				log.error(e.getMessage());
-			} catch (IOException e) {
-				log.error(e.getMessage());
-			}
-			
-			fvo = FileVO.builder()
-					.parent(vo.getNo())
-					.oriName(oName)
-					.newName(nName)
-					.build();
+		fvo.setOriName(oriName);
+		fvo.setNewName(newName);
+		
+		//파일 저장
+		try {
+			file.transferTo(new File(path, newName));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	//파일 삭제
+	public void fileDelete(String newName) {
+		//파일 경로 지정
+		Path path = Paths.get(uploadPath);
+				
+		//현재 게시판에 존재하는 파일객체를 만듬
+		File file = new File(path + "/" + newName);
+				
+		if(file.exists()) { // 파일이 존재하면
+			file.delete(); // 파일 삭제	
+		}
+	}
+	
+	//리스트 페이징
+	public int[] currentPageGroup(int pg, int lastPageNum) {
+		int currentPageGroup = (int)Math.ceil(pg / 10.0);
+		int pageGroupStart = (currentPageGroup - 1) * 10 + 1;
+		int pageGroupEnd = currentPageGroup * 10;
+		
+		if(pageGroupEnd > lastPageNum) {
+			pageGroupEnd = lastPageNum;
 		}
 		
-		return fvo;
-	}
-	
-	// 현재 페이지 번호
-	public int getCurrentPage(String pg) {
-		int currentPage = 1;
-		
-		if(pg != null) {
-			currentPage = Integer.parseInt(pg);
-		}
-		return currentPage;
-	}
-	
-	// 페이지 시작값
-	public int getLimitStart(int currentPage) {
-		return (currentPage -1) * 10;
-	}
-	
-	// 마지막 페이지 번호
-	public int getLastPageNum(int total) {
-		int lastPageNum = 0;
-		if(total % 10 == 0) {		// 토탈이 10으로 나누어 떨어지는지
-			lastPageNum = total / 10;
-			
-		}else {
-			lastPageNum = total / 10 + 1;
-		}
-		return lastPageNum;
-	}
-	
-	// 페이지 시작 번호
-	public int getPageStartNum(int total, int start) {
-		
-		return total - start;	// total에서 start를 빼주면 됨
-		
-	}
-	
-	// 페이지 그룹
-	public int[] getPageGroup(int currentPage, int lastPageNum) {	// 현재 페이지와 마지막 페이지만 있으면 구할 수 있음
-		
-		int groupCurrent = (int) Math.ceil(currentPage / 10.0);		// 실수로 계산해서 뒷자리 떼고 정수로 표현
-		int groupStart = (groupCurrent -1) * 10 + 1;
-		int groupEnd = groupCurrent * 10;
-		
-		if(groupEnd > lastPageNum) {
-			groupEnd = lastPageNum;
-		}
-		int[] groups = {groupStart, groupEnd};
-		
+		int[] groups = {pageGroupStart, pageGroupEnd, lastPageNum};
 		return groups;
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

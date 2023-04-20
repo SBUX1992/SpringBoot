@@ -1,29 +1,29 @@
-package kr.co.sboard.vo;
+package kr.co.sboard.entity;
 
-import org.springframework.web.multipart.MultipartFile;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ArticleVO {
+@Entity
+@Table(name="board_article")
+public class ArticleEntity {
 
+	@Id
 	private int no;
 	private int parent;
 	private int comment;
-	private String cate;
 	private String title;
 	private String content;
-	private MultipartFile fname;
-	private int file;
-	private int hit;
 	private String uid;
 	private String regip;
 	private String rdate;
 	
 	private String nick;
-	private FileVO filevo;
 	
 	public String getRdate() {
 		return rdate.substring(2, 10);

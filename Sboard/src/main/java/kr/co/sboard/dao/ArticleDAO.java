@@ -8,18 +8,22 @@ import org.springframework.stereotype.Repository;
 import kr.co.sboard.vo.ArticleVO;
 import kr.co.sboard.vo.FileVO;
 
-@Mapper
 @Repository
+@Mapper
 public interface ArticleDAO {
-
+	//게시물
 	public int insertArticle(ArticleVO vo);
-	public int insertFile(FileVO vo);
-	public int selectCountTotal();		// 전체개시물 갯수 구하기
 	public ArticleVO selectArticle(int no);
-	public List<ArticleVO> selectArticles(int start);
-	public FileVO selectFile(int fno); // 
-	public int updateFileDownload(int fno); // 다운로드 횟수
+	public List<ArticleVO> selectArticles(int pg);
+	public int countArticles();
 	public int updateArticle(ArticleVO vo);
+	public int updateArticleHit(int no);
 	public int deleteArticle(int no);
+	
+	//파일
+	public int insertFile(FileVO vo);
+	public FileVO selectFile(int fno);
+	public void updateFileDownload(int fno);
+	public void deleteFile(int no);
 	
 }
