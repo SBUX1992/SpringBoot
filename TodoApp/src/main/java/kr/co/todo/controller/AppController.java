@@ -2,7 +2,6 @@ package kr.co.todo.controller;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,12 +24,14 @@ public class AppController {
 	
 	// SQL 데이터 불러올때
 	@GetMapping("todos")
+	@CrossOrigin(origins = "*")
 	public List<TodoVO> todos() {
 		return service.selectTodos();
 	}
 	
 	// SQL 데이터 등록
 	@PostMapping("todo")
+	@CrossOrigin(origins = "*")
 	public TodoVO todo(@RequestBody TodoVO vo) {
 		
 		log.info("content : " + vo.getContent());		
@@ -42,6 +43,7 @@ public class AppController {
 	
 	// 개별삭제
 	@DeleteMapping("remove")
+	@CrossOrigin(origins = "*")
 	public void remove(int no) {
 		
 		log.info("글번호 : " + no);
@@ -51,6 +53,7 @@ public class AppController {
 	
 	// 전체 삭제
 	@DeleteMapping("clear")
+	@CrossOrigin(origins = "*")
 	public void clear() {
 		service.deleteTodoAll();
 	}
