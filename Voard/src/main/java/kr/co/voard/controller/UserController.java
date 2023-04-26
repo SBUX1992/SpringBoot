@@ -8,23 +8,25 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.voard.jwt.JWTUtil;
 import kr.co.voard.repository.UserEntity;
 import kr.co.voard.security.MyUserDetails;
 import kr.co.voard.security.SecurityUserService;
+import kr.co.voard.service.UserService;
+import kr.co.voard.vo.TermsVO;
 import kr.co.voard.vo.UserVO;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-@Controller
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 	
 	@Autowired
@@ -36,27 +38,47 @@ public class UserController {
 	@Autowired
 	private JWTUtil jwtUtil;
 	
-	@ResponseBody
-//	@CrossOrigin(origins = "*")
+	@Autowired
+	private UserService service;
+	
+	// 약관
+	@GetMapping("/user/terms")
+	public TermsVO terms() {		
+		return service.selectTerms();
+	}
+	
+	// 회원가입
+	@PostMapping("/user/register")
+	public void register(@RequestBody UserVO vo) {
+		service.insertUser(vo);
+	}	
+	
+	// 아이디 중복확인
+	@GetMapping("/user/countUid")
+	public int countUid(String uid) {
+		
+		log.info("uid : " + uid);
+		
+		return service.countUid(uid);
+	}
+	
 	@PostMapping("/user/login")
 	public Map<String, Object> login(@RequestBody UserVO vo) {
 		log.info("vo : " + vo);
-		
 		// 사용자 정보 객체생성
 		String uid = vo.getUid();
 		String pass = vo.getPass();
-		securityUserService.loadUserByUsername(uid);
 		MyUserDetails myUserDetails = securityUserService.loadUserByUsername(uid);
 		log.info("login...1");	// 아이디가 없으면 에러 발생
 		
-		// security 인증처리
+		// Security 인증처리
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(myUserDetails, pass));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		log.info("login...2");	// 비밀번호 틀리면 에러 발생
 		
 		// JWT 생성
 		String token = jwtUtil.generateToken(uid);
-		log.info("login...3" + token);	// 아이디, 비밀번호가 DB와 일치하면 토큰 발행
+		log.info("login...3 : " + token);	// 아이디, 비밀번호가 DB와 일치하면 토큰 발행
 		
 		// 데이터 출력
 		
