@@ -9462,3 +9462,66 @@ java.util.NoSuchElementException: No value present
 2023-04-26T12:37:26.849+09:00  INFO 8456 --- [http-nio-8080-exec-2] k.co.voard.jwt.JwtAuthenticationFilter   : doFilterInternal...1
 2023-04-26T12:37:26.850+09:00  INFO 8456 --- [http-nio-8080-exec-2] k.co.voard.jwt.JwtAuthenticationFilter   : doFilterInternal...2 : null
 2023-04-26T12:37:26.860+09:00  INFO 8456 --- [http-nio-8080-exec-2] kr.co.voard.controller.UserController    : uid : v101
+2023-04-26T12:58:54.586+09:00  INFO 8456 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (0 additions, 0 deletions, 3 modifications)
+2023-04-26T12:58:54.593+09:00  INFO 8456 --- [Thread-5] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-04-26T12:58:54.594+09:00  INFO 8456 --- [Thread-5] o.a.c.c.C.[Tomcat].[localhost].[/Voard]  : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-04-26T12:58:54.596+09:00  WARN 8456 --- [Thread-5] o.a.c.loader.WebappClassLoaderBase       : The web application [Voard] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.5/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.5/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.5/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.5/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.5/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.5/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.5/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.5/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.5/java.lang.Thread.run(Thread.java:833)
+2023-04-26T12:58:54.600+09:00  INFO 8456 --- [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-26T12:58:54.602+09:00  INFO 8456 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-04-26T12:58:54.607+09:00  INFO 8456 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-04-26T12:58:54.660+09:00  INFO 8456 --- [restartedMain] kr.co.voard.VoardApplication             : Starting VoardApplication using Java 17.0.5 with PID 8456 (C:\Users\java1\Desktop\Workspace\SpringBoot\Voard\target\classes started by java1 in C:\Users\java1\Desktop\Workspace\SpringBoot\Voard)
+2023-04-26T12:58:54.661+09:00  INFO 8456 --- [restartedMain] kr.co.voard.VoardApplication             : No active profile set, falling back to 1 default profile: "default"
+2023-04-26T12:58:54.782+09:00  INFO 8456 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-26T12:58:54.790+09:00  INFO 8456 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 1 JPA repository interfaces.
+2023-04-26T12:58:54.855+09:00  INFO 8456 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-04-26T12:58:54.855+09:00  INFO 8456 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-04-26T12:58:54.855+09:00  INFO 8456 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.7]
+2023-04-26T12:58:54.866+09:00  INFO 8456 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/Voard]  : Initializing Spring embedded WebApplicationContext
+2023-04-26T12:58:54.866+09:00  INFO 8456 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 203 ms
+2023-04-26T12:58:54.889+09:00  INFO 8456 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-26T12:58:54.894+09:00  INFO 8456 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2023-04-26T12:58:54.903+09:00  INFO 8456 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@47b9fe2e
+2023-04-26T12:58:54.903+09:00  INFO 8456 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2023-04-26T12:58:54.907+09:00  INFO 8456 --- [restartedMain] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2023-04-26T12:58:54.934+09:00  INFO 8456 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-26T12:58:54.934+09:00  INFO 8456 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-26T12:58:55.002+09:00  WARN 8456 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-26T12:58:55.010+09:00  INFO 8456 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6f3977aa, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2f04f3f9, org.springframework.security.web.context.SecurityContextHolderFilter@7dac8124, org.springframework.security.web.header.HeaderWriterFilter@20e27e25, org.springframework.security.web.authentication.logout.LogoutFilter@1e12ea10, kr.co.voard.jwt.JwtAuthenticationFilter@16af9370, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2cfba43c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1fdbe4d0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5fa9c597, org.springframework.security.web.session.SessionManagementFilter@788c1c2f, org.springframework.security.web.access.ExceptionTranslationFilter@40222481]
+2023-04-26T12:58:55.075+09:00  INFO 8456 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-04-26T12:58:55.087+09:00  INFO 8456 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path '/Voard'
+2023-04-26T12:58:55.090+09:00  INFO 8456 --- [restartedMain] kr.co.voard.VoardApplication             : Started VoardApplication in 0.449 seconds (process running for 1432.935)
+2023-04-26T12:58:55.091+09:00  INFO 8456 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2023-04-26T13:32:55.181+09:00  INFO 8456 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/Voard]  : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-04-26T13:32:55.181+09:00  INFO 8456 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-04-26T13:32:55.182+09:00  INFO 8456 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2023-04-26T13:32:55.183+09:00  INFO 8456 --- [http-nio-8080-exec-1] k.co.voard.jwt.JwtAuthenticationFilter   : doFilterInternal...1
+2023-04-26T13:32:55.184+09:00  INFO 8456 --- [http-nio-8080-exec-1] k.co.voard.jwt.JwtAuthenticationFilter   : doFilterInternal...2 : null
+2023-04-26T13:32:55.186+09:00  INFO 8456 --- [http-nio-8080-exec-1] kr.co.voard.controller.UserController    : uid : v101
+2023-04-26T13:33:02.289+09:00  INFO 8456 --- [http-nio-8080-exec-2] k.co.voard.jwt.JwtAuthenticationFilter   : doFilterInternal...1
+2023-04-26T13:33:02.290+09:00  INFO 8456 --- [http-nio-8080-exec-2] k.co.voard.jwt.JwtAuthenticationFilter   : doFilterInternal...2 : null
+2023-04-26T13:33:02.290+09:00  INFO 8456 --- [http-nio-8080-exec-2] kr.co.voard.controller.UserController    : uid : v10
+2023-04-26T13:34:34.234+09:00  INFO 8456 --- [RMI TCP Connection(63)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2023-04-26T13:34:34.239+09:00  INFO 8456 --- [RMI TCP Connection(63)-127.0.0.1] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-04-26T13:34:34.239+09:00  INFO 8456 --- [RMI TCP Connection(63)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/Voard]  : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2023-04-26T13:34:34.241+09:00  WARN 8456 --- [RMI TCP Connection(63)-127.0.0.1] o.a.c.loader.WebappClassLoaderBase       : The web application [Voard] appears to have started a thread named [HikariPool-2 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.5/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.5/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.5/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.5/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.5/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.5/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.5/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.5/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.5/java.lang.Thread.run(Thread.java:833)
+2023-04-26T13:34:34.243+09:00  INFO 8456 --- [RMI TCP Connection(63)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-04-26T13:34:34.244+09:00  INFO 8456 --- [RMI TCP Connection(63)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2023-04-26T13:34:34.246+09:00  INFO 8456 --- [RMI TCP Connection(63)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
